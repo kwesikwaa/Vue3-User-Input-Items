@@ -1,0 +1,9 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.yo{
+    @apply bg-blue-500 text-white hover:bg-blue-400 p-2 rounded-lg;
+}

@@ -43,6 +43,7 @@
     // function previewfxn(e){
     //     var y = e.target.files[0]
     //     console.log(y)
+    //     try and
     //     // imgsource.value = URL.createObjectURL(y)
     //     props.imgsr = URL.createObjectURL(y)
     // }

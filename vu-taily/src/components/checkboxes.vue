@@ -16,11 +16,12 @@
         </div>
     </div>
     <br>
-    <span v-for="ss in chosen">
-    <transition name="yo">
-        <span class=" px-2"> {{ss}} </span>
-    </transition>
-    </span>
+    
+    <transition-group tag="p" name="list" >
+        <!-- does work with transform until you make it inline-block -->
+        <span class=" px-2 inline-block bg-green-400 rounded-lg text-black pb-1 mx-1" v-for="ss in chosen" :key="ss">{{ss}}</span>
+    </transition-group>
+    
     <br>
 </template>
 <script setup lang="ts">
@@ -39,7 +40,12 @@
 
 </script>
 <style scoped>
-    .yo-enter-active, .yo-leave-active{transition: all 5s ease;}
-    .yo-enter-from{transform: translateY(-30px);}
-    .yo-leave-to{transform: translateY(30px);}
+    .list-enter-active{transition: all 0.3s ease-in-out;}
+    /* position absolute needed to work  */
+    .list-leave-active{transition: all 0.3s ease-in-out; position: absolute;}
+    .list-move{transition: all 0.3s ease;}
+    .list-enter-from,.list-leave-to{opacity: 0; transform:translateY(-30px);}
+    .list-enter-to,.list-leave-from{opacity: 1; transform:translateY(0px);}
+
+    
 </style>

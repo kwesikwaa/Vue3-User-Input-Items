@@ -8,21 +8,21 @@
                     </div>
                     <div class="cred pl-5 flex">
                         <div class="a flex justify-center items-center space-x-1">
-                            <div class="name text-white">Araba Adedzewa</div>
+                            <div class="name text-white">{{commentdetial.name}}</div>
                             <div class="kindofartist bg-yellow-600 w-4 h-4 rounded-full"></div>
                         </div>
-                        <div class="role text-white">date commented</div>
+                        <div class="role text-white">{{commentdetial.date}}</div>
                     </div>
                 </div>
                 <div v-show="!isReplying" class="comment-actions flex justify-end space-x-2 px-4">
-                    <button class="text-white bg-red-700 px-2">EDIT</button>
-                    <button class="text-white bg-red-700 px-2">DELETE</button>
-                    <button @click="reply" class="text-white bg-red-700 px-2">REPLY</button>
+                    <button class="text-white bg-gray-800 px-2">EDIT</button>
+                    <button class="text-white bg-gray-800 px-2">DELETE</button>
+                    <button @click="openreply" class="text-white bg-gray-800 px-2">REPLY</button>
                 </div>
             </div>
             <div class="comment-body container p-4">
                 <div class="container border border-gray-600 p-2 rounded-sm text-white">
-                    CoMMENT BODY asdlkflk;sajflsadjflsadjflsdjafklsajd;flsdf saflsdajflksdajflksadjf;lsajf;l sal fjsldfkj salsdjflsf jl salfjsalfjsalfsa lf salflsajflsk fj
+                    {{commentdetial.comment}}
                 </div>
             </div>
             
@@ -32,7 +32,7 @@
             <div class="container bg-gray-800 min-w-min rounded-md ">
                 <div class="container p-4">
                     <div class="container border border-gray-600 rounded-sm text-white">
-                        <textarea class="bg-gray-900 p-2 w-full max-h-36 text-white rounded-sm" name="" id="" cols="30" rows="10" style="resize: none;" ></textarea>
+                        <textarea v-model="content" class="bg-gray-900 p-2 w-full max-h-36 text-white rounded-sm" name="" id="" cols="30" rows="10" style="resize: none;" ></textarea>
                     </div>
                 </div>
                 <div class="reply-actions flex justify-end space-x-2 px-4 pb-4">
@@ -45,16 +45,55 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
-    let isReplying = ref(true)
+    let isReplying = ref(false);
+    let content = ref('');
+    const thisuser = {};
+
+    interface props{
+        name?: string,
+        date?: string,
+        comment?: string,
+        isReply?: boolean
+    }
+    //create and interface for model bluprint
+    class resdata{
+        comment?: string = '';
+        post_id?: string= '';
+        user_id?: string= '';
+        reply_id?: string= '';
+    }
+
+    const commentdetial = withDefaults(defineProps<props>(),{
+        name: 'Araba Adedzewa',
+        date: 'date-created',
+        isReply: false,
+        comment: 'CoMMENT BODY asdlkflk;sajflsadjflsadjflsdjafklsajd;flsdf saflsdajflksdajflksadjf;lsajf;l sal fjsldfkj salsdjflsf jl salfjsalfjsalfsa lf salflsajflsk fj'
+    })
+
+    const openreply = ()=>{
+        isReplying.value = !isReplying.value;
+        const tempto = (commentdetial.isReply)?'@'+commentdetial.name:'';
+        content.value = tempto;
+    }
 
     const reply = ()=>{
-        //do more here
+        const yo = new resdata();
+        yo.comment = content.value;
+        yo.post_id = 'xx';
+        yo.user_id= 'yy';
+        yo.reply_id='qq';
+        
         //during reply copy main comment and children to local storagfe
         //save to both localstorage and db
         //immediately repopulate children from localstorage without refresh
         //dispose when??? after repopulation or on unmounted??
+        //run through the string to check for 
+        console.log(yo);
+        
+        localStorage.setItem("qcomment",JSON.stringify(yo));
         isReplying.value = !isReplying.value;
+        
         }
 </script>

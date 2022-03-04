@@ -6,18 +6,18 @@
                     <div class="avatar w-10 h-10 bg-red-500 rounded-full absolute -left-5 -top-3 flex justify-center items-center">
                         <div class="avatar w-8 h-8 bg-yellow-50 rounded-full absolute "></div>
                     </div>
-                    <div class="cred pl-5 flex">
+                    <div class="cred pl-5 flex items-stretch">
                         <div class="a flex justify-center items-center space-x-1">
                             <div class="name text-white">{{commentdetial.name}}</div>
                             <div class="kindofartist bg-yellow-600 w-4 h-4 rounded-full"></div>
                         </div>
-                        <div class="role text-white">{{commentdetial.date}}</div>
+                        <div class="role text-white pl-2"><span>|| on </span> {{commentdetial.date}}</div>
                     </div>
                 </div>
                 <div v-show="!isReplying" class="comment-actions flex justify-end space-x-2 px-4">
-                    <button class="text-white bg-gray-800 px-2">EDIT</button>
-                    <button class="text-white bg-gray-800 px-2">DELETE</button>
-                    <button @click="openreply" class="text-white bg-gray-800 px-2">REPLY</button>
+                    <button class="text-white bg-gray-800 hover:bg-gray-700 px-2 border border-opacity-0 hover:border-opacity-100 hover:border-gray-800">EDIT</button>
+                    <button class="text-white bg-gray-800 hover:bg-gray-700 px-2 border border-opacity-0 hover:border-opacity-100 hover:border-gray-800">DELETE</button>
+                    <button @click="openreply" class="text-white bg-gray-800 hover:bg-gray-700 px-2 border border-opacity-0 hover:border-opacity-100 hover:border-gray-800">REPLY</button>
                 </div>
             </div>
             <div class="comment-body container p-4">
@@ -52,17 +52,21 @@ import { ref } from 'vue';
     const thisuser = {};
 
     interface props{
-        name?: string,
-        date?: string,
+        id?: string,
         comment?: string,
-        isReply?: boolean
+        date?: string,
+        name?: string,
+        post_id?: string,
+        user_id?: string,
+        whichcomment_id?: boolean
     }
     //create and interface for model bluprint
-    class resdata{
-        comment?: string = '';
-        post_id?: string= '';
-        user_id?: string= '';
-        reply_id?: string= '';
+    class newcomment{
+        comment: string = '';
+        post_id: string= '';
+        user_id: string= '';
+        whichcomment_id: string= '';
+        isReply: boolean;
     }
 
     const commentdetial = withDefaults(defineProps<props>(),{
@@ -79,11 +83,11 @@ import { ref } from 'vue';
     }
 
     const reply = ()=>{
-        const yo = new resdata();
+        const yo = new newcomment();
         yo.comment = content.value;
-        yo.post_id = 'xx';
-        yo.user_id= 'yy';
-        yo.reply_id='qq';
+        yo.post_id = 'xx'; //post
+        yo.user_id= 'yy'; //artist
+        yo.whichcomment_id='qq'; //reply to which comment .. if isreply
         
         //during reply copy main comment and children to local storagfe
         //save to both localstorage and db

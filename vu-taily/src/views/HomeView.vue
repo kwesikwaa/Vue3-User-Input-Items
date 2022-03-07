@@ -1,6 +1,7 @@
 <template>
     <Postsidedetials/>
     <Commentwidget/>
+    <Gallerywidget/>
     <Uploaddetails widgetTitle="ArtWork Title" placeholder="Title"/>
     <Uploaddetails widgetTitle="Description" placeholder="Long Description" :isTitle='des'/>
     <Checkboxes widgetTitle="Mediums" :choicesdata="mediums"/>
@@ -32,6 +33,7 @@
     import Checkboxes from "../components/checkboxes.vue";
     import Postsidedetials from "../components/postsidedetials.vue";
     import Commentwidget from "../components/commentwidget.vue";
+    import Gallerywidget from "../components/gallerywidget.vue";
     
     //for dev purpose to toggle the isprofile prop
     //rename vars when everythings comes together

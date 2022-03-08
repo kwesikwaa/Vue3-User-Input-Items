@@ -1,7 +1,7 @@
 <template>
     <Postsidedetials/>
     <Commentwidget/>
-    <Gallerywidget/>
+    <Gallerywidget :ximages='imgs'/>
     <Uploaddetails widgetTitle="ArtWork Title" placeholder="Title"/>
     <Uploaddetails widgetTitle="Description" placeholder="Long Description" :isTitle='des'/>
     <Checkboxes widgetTitle="Mediums" :choicesdata="mediums"/>
@@ -18,11 +18,14 @@
     <!-- <Preview :imgsr="hey" :isProfile="izy"/> -->
     <br>
     <div class="grid grid-cols-3 gap-3">
-        <Preview v-for="pic in imgs" 
-            :imgsr="pic" :isProfile="izy" 
-            @closed="a"          
-        />
-        
+        <transition-group tag="" name="list" >
+            <div class="w-full" v-for="pic in imgs">
+                <Preview  
+                :imgsr="pic" :isProfile="izy" 
+                @closed="a"          
+            />
+            </div>
+        </transition-group>
     </div>
 </template>
 
@@ -85,3 +88,14 @@
         }
     }
 </script>
+
+<style scoped>
+    .list-enter-active{transition: all 0.3s ease-in-out;}
+    /* position absolute needed to work  */
+    .list-leave-active{transition: all 0.3s ease-in-out; position: absolute;}
+    .list-move{transition: all 0.3s ease;}
+    .list-enter-from,.list-leave-to{opacity: 0; transform:translateY(-30px);}
+    .list-enter-to,.list-leave-from{opacity: 1; transform:translateY(0px);}
+
+    
+</style>

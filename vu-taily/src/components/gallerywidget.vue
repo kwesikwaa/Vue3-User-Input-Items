@@ -6,8 +6,8 @@
             </div>
             <div class="container p-4">
                 <div class="container p-2 gap-1 grid grid-cols-3 bg-gray-900 border border-gray-600">
-                    <div v-for="item in 9" :key="item" class="container w-full rounded-sm overflow-hidden text-white">
-                        <img class="w-full object-cover object-center" src='../assets/frg.jpg' alt="frog">
+                    <div v-for="item in props.ximages" :key="item" class="container w-full rounded-sm overflow-hidden text-white">
+                        <img class="w-full object-fill object-center" :src='item' alt="frog">
                     </div>
                 </div>
                 <div v-if="hasHeader" class="container pt-3 flex space-x-2 justify-center text-white">
@@ -31,5 +31,7 @@
 
     const hasHeader = true;
     const items = ref([1,2,3,4,5,3])
+
+    let props = defineProps(['ximages'])
 
 </script>

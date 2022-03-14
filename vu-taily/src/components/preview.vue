@@ -2,49 +2,86 @@
     <div class="container relative w-44 bg-gray-800 rounded-md">
         <div class="p-2 flex-col space-y-2 justify-center">
             <div class="container w-40 h-40 bg-gray-600">
-                <img class="w-full h-full object-contain" :src="props.imgsr" alt="up">
+                <img class="w-full h-full object-contain" :src="imagesource" alt="up">
             </div>
             <div class="flex space-x-2 justify-center">
-                <button v-if="props.isProfile" @click="picker.click()" class="rounded-sm bg-red-600 flex-grow text-white px-2">UPLOAD</button>
+                <div v-if="props.isProfile">
+                    <button :disabled="props.disable" @click="picker.click()" class="rounded-sm bg-red-600 flex-grow text-white px-2">UPLOAD</button>
+                    <input v-show="show" @change="picdropped" type="file" ref="picker" accept="image/*">
+                </div>
                 <textarea v-else class="w-full h-14 bg-gray-700 text-white text-sm" placeholder="Caption" cols="30" rows="10" style="resize:none"></textarea>
-                <button v-show="props.isProfile" @click="" class="rounded-sm bg-red-600 flex-grow text-white px-2">CROP</button>
+                <button :disabled="props.disable" v-show="props.isProfile" @click="emitcropper" class="rounded-sm bg-red-600 flex-grow text-white px-2">CROP</button>
             </div>
         </div>
-        <button @click="emi" class="absolute text-white bg-red-600 top-1.5 right-1.5 hover:bg-red-500 px-2 rounded-full text-center" >x</button>
-        <!-- <input v-show="show" @change="emis" type="file" ref="picker" accept="image/*"> -->
+        <button v-if="!props.isProfile" @click="emitclose" class="absolute text-white bg-red-600 top-1.5 right-1.5 hover:bg-red-500 px-2 rounded-full text-center" ><div class=" pb-1">x</div></button>
+        
     </div>
     
 </template>
 
 <script setup lang="ts">
-    import {ref } from 'vue';
-    // Two final pieces to make this 100%
-    // implement the crop feature
-    // fix the profile mode upload button
+    import {onMounted, onUpdated, ref, watch} from 'vue';
+    import {useAdminStore} from '../stores/counter'
+
     interface props{
-        imgsr: string;
+        imgsr: any;
         isProfile: boolean
+        disable: boolean
     }
 
-    const props = withDefaults(defineProps<props>(),{isProfile: false, imgsr:''});
-    const emits = defineEmits(["closed"])
+    const store = useAdminStore()
+    const props = withDefaults(defineProps<props>(),{disable:false,isProfile: false, imgsr:''});
+    const emits = defineEmits(["closed",'opencropper'])
     
-    // let imgsource = ref("");
+    let imagesource = ref('')
+    let temp = ref('')
     let picker = ref(null);
+    
     const show = false;
 
-    function emi(){emits("closed",props.imgsr)}
-    function picklocal(e){
-            var x = e.target.files[0]
-            props.imgsr = URL.createObjectURL(x)
 
+    onMounted( ()=>{
+        if(props.isProfile){
+            imagesource.value = temp.value
+        }
+        else{imagesource.value = props.imgsr}
     }
+    )
+    onUpdated(()=>{
+        if(props.isProfile){
+            if(store.croppedimage){
+                imagesource.value = store.croppedimage
+            }
+        }
+    })
+    
 
-    // function previewfxn(e){
-    //     var y = e.target.files[0]
-    //     console.log(y)
-    //     try and
-    //     // imgsource.value = URL.createObjectURL(y)
-    //     props.imgsr = URL.createObjectURL(y)
-    // }
+    function emitcropper(){
+        if(imagesource.value){
+            emits("opencropper",temp.value)
+            console.log('opened croper')
+        }
+    }
+    
+    function emitclose(){
+        if(props.isProfile){
+            imagesource.value =''
+        }
+        else{
+            emits("closed",props.imgsr)
+        }
+    }
+    function picdropped(e){
+        try {
+            var x = e.target.files[0]
+            imagesource.value = URL.createObjectURL(x)
+            temp.value = URL.createObjectURL(x)
+            store.clear()
+            console.log(temp.value)
+        } catch (error) {
+            
+        }
+
+            
+    }
 </script>

@@ -1,25 +1,37 @@
 <template>
+    <!-- <div class="conainter m-2 text-4xl rounded-full w-10 h-10 bg-red-600 text-yellow-500 flex justify-center items-center">
+        <p>X</p>
+    </div>
     <Postsidedetials/>
     <Commentwidget/>
     <Gallerywidget :ximages='imgs'/>
     <Uploaddetails widgetTitle="ArtWork Title" placeholder="Title"/>
-    <Uploaddetails widgetTitle="Description" placeholder="Long Description" :isTitle='des'/>
+    <Uploaddetails widgetTitle="Description" placeholder="Long Description" :isTitle='des'/> -->
+    <!-- //this is to accept admin inputs -->
+    <!-- <button class=" bg-red-500 text-white p-2" @click=editmodeswitch>EDIT</button>
+    <input v-if="editmode" class="p-2 w-full" @keyup.enter="addtolist('medium')" v-model="medtemp" type="text" name="" placeholder="type options and seperate them with commas and hit enter">
     <Checkboxes widgetTitle="Mediums" :choicesdata="mediums"/>
     <Checkboxes widgetTitle="Softwares" :choicesdata="softwares"/>
-    <input v-show="false" @change="doit" type="file" ref="pix" :multiple="!izy" accept="image/*">
     <label for="prifle">Profile??</label>
      loaded items : {{imgs.length}}
+    -->
+
+    <!-- PREVIEWING THE PREVIEW WIDGET ... BOTH PROFILE AND PREVIEW -->
+
+    <input v-show="false" @change="doit" type="file" ref="pix" :multiple="!izy" accept="image/*">
     <div class="flex space-x-1">
         <button @click="pix.click()" class=" bg-red-600 hover:bg-red-500 rounded-md p-2 px-6 text-white">UPLOAD</button>
         <button @click="tocache" class=" bg-red-600 hover:bg-red-500 rounded-md p-2 px-6 text-white">TO CACHE</button>
-        <button @click="fromcache" class=" bg-red-600 hover:bg-red-500 rounded-md p-2 px-6 text-white">FROM CACHE</button>
         <button @click="clearcache" class=" bg-red-600 hover:bg-red-500 rounded-md p-2 px-6 text-white">CLEAR CACHE</button>
-    </div>
-    <!-- <Preview :imgsr="hey" :isProfile="izy"/> -->
+    </div>          
+    <Preview :isProfile="true" @opencropper="opencropa" :imgsr="croppedimage" :disable="togglecropper"/>
     <br>
+    <Imagecropper v-if="togglecropper"  :imagetocrop="imagetocrop" @closed="cropaclose" @cropdonenclose="cropdone"/>
+    <br>
+    
     <div class="grid grid-cols-3 gap-3">
         <transition-group tag="" name="list" >
-            <div class="w-full" v-for="pic in imgs">
+            <div class="w-full" v-for="pic in imgs" key="pic">
                 <Preview  
                 :imgsr="pic" :isProfile="izy" 
                 @closed="a"          
@@ -37,7 +49,11 @@
     import Postsidedetials from "../components/postsidedetials.vue";
     import Commentwidget from "../components/commentwidget.vue";
     import Gallerywidget from "../components/gallerywidget.vue";
-    
+    import Imagecropper from "../components/imagecropper.vue";
+    import {useAdminStore}  from '../stores/counter'
+
+    const store = useAdminStore()
+
     //for dev purpose to toggle the isprofile prop
     //rename vars when everythings comes together
     let izy = false
@@ -45,12 +61,45 @@
     let pix = ref(null)
     let hey = ref('')
     let imgs = ref([])
+
+    let editmode = ref(false)
+    let medtemp = ref('')
+    let mediums = ref([])
+    let togglecropper = ref(false)
+    let imagetocrop = ref('')
+    let croppedimage = ref('')
+    
+
+
     let softwares = ['Houdini','Maya','3DS Max','Keyshot','Modo','GIMP','Adobe Photoshop' ,'Revit','Sketchup','AutoCAD','Figma','Toon Boom','Motionbuilder','Iclone','DazStudio','Clarisse','Topogun','3D Coat','Marmoset Toolbag','Zbrush','Unity','Unreal Engine', 'Cascadeur', 'Marvelous Designer','Cinema4D','Blender','Blackmagic Fusion','Nuke','Substance Painter','Substance Designer','Substance Sampler','Quixel Mixer','Quixel Megascans','After Effects','Adobe Premier','Davinci Resolve','Lightwave']
-    let mediums = ['2D Animation','3D Animation','Modeling','VFX', 'Graphics Design','Video Editing','Film','Sketch']
+    // let mediums = ['2D Animation','3D Animation','Modeling','VFX', 'Graphics Design','Video Editing','Film','Sketch']
 
     //pulling from local machine seem to randomise name on every upload
     //making it impossible to load from localstorage
     //use supabase on next try.. sometime later not now
+
+    const editmodeswitch = ()=>{editmode.value = !editmode.value}
+    function addtolist(which){
+        if(which==='medium'){
+            mediums.value = medtemp.value.split(',');
+        }
+        else if(which==='software'){
+
+        }
+        
+    }
+    function opencropa(payload){
+        imagetocrop.value = payload
+        togglecropper.value = true;
+    }
+    function cropaclose(){
+        togglecropper.value =false;
+    }
+    function cropdone(){
+        croppedimage.value = store.croppedimage
+        togglecropper.value=false
+    }
+
     function tocache(){
         console.log('saving')
         localStorage.setItem("uploads",JSON.stringify(imgs.value))

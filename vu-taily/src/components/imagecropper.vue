@@ -29,6 +29,7 @@
     let cropper;
     let imagetocrop = ref(null)
     let croppedimage = ref(null)
+    let testa = ref(null)
 
     onMounted(()=>{
         console.log(imagetocrop.value)
@@ -43,10 +44,14 @@
             crop:()=>{
                 //determins save size
                 const canvas = cropper.getCroppedCanvas({width:300,height:300,imageSmoothingQuality: 'high',})
+                
                 canvas.toBlob((blob)=>{
+                        const formdata = new FormData()
+                        formdata.append('croppedimage',blob,'avatar.jpeg')
                         croppedimage.value = URL.createObjectURL(blob)
+                        testa = formdata.get('croppedimage')
                     },
-                    'image/png',1)
+                    )
                 // croppedimage.value = canvas.toDataURL("image/jpeg")
             }
         })
@@ -60,11 +65,19 @@
     function emi(){emits("closed")}
     function emitdonecropin(){
         store.savecroppedimage(croppedimage.value);
+        store.savobject(testa)
+        console.log(`tell type first ${typeof(store.objectfile)}`)
         console.log(`this be store value ${store.croppedimage}`)
+        console.log(`this be storeobject value ${store.objectfile}`)
+        console.log(`tell type after assignment ${typeof(store.objectfile)}`)
         console.log(typeof(croppedimage.value))
+        console.log(testa)
+        console.log(testa.name)
+        console.log(store.objectfile.name)
+        console.log(typeof(testa))
         emits("cropdonenclose")}
 
-    // ??????????
+    
     function picklocal(e){
             var x = e.target.files[0]
             props.imagetocrop = URL.createObjectURL(x)

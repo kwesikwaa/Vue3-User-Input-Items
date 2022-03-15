@@ -4,7 +4,8 @@ export const useAdminStore = defineStore("admin",{
   
   state: () => ({
     counter: 0,
-    croppedimage: ''
+    croppedimage: '',
+    objectfile: null
     
   }),
   getters: {
@@ -20,7 +21,9 @@ export const useAdminStore = defineStore("admin",{
     },
     savecroppedimage(value){
       this.croppedimage = value;
-
+    },
+    savobject(value){
+      this.objectfile = value;
     }
   }
 })

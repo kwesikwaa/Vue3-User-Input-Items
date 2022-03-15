@@ -26,7 +26,7 @@
     interface props{
         imgsr: any;
         isProfile: boolean
-        disable: boolean
+        disable?: boolean
     }
 
     const store = useAdminStore()
@@ -74,10 +74,11 @@
     function picdropped(e){
         try {
             var x = e.target.files[0]
+            console.log(x)
             imagesource.value = URL.createObjectURL(x)
             temp.value = URL.createObjectURL(x)
             store.clear()
-            console.log(temp.value)
+            console.log(`ast ${temp.value}`)
         } catch (error) {
             
         }

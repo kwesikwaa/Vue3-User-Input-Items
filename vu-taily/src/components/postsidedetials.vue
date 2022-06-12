@@ -1,5 +1,5 @@
 <template>
-    <div class="container w-60 bg-gray-800">
+    <div class=" flex justify-center bg-gray-800 mx-2">
         <div class="p-2">
             <div class="usercard flex space-x-2">
                 <div class="avatar w-10 h-10 bg-red-500 rounded-full"></div>

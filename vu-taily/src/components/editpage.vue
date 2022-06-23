@@ -26,7 +26,7 @@
 <script setup>
     import Uploaddetails from './uploaddetails.vue';
     import Preview from './preview.vue';
-    import {onBeforeMount, onMounted, ref} from 'vue'
+    import {onBeforeMount, ref} from 'vue'
     import { useBuilderStore } from '../stores/builder';
     import { storeToRefs } from 'pinia';
     
@@ -55,6 +55,8 @@
     }
     
     let imgs = storeToRefs(store).imagesupload
+    // let imgs = storeToRefs(store).getimagelist
+
     let tempimagesbasket = ref([])
     
     function captionreceive(val){
@@ -70,8 +72,10 @@
     function save(){
         console.log(sitetitle.value)
         // console.log(sitetitle.value.replace(/\s+/g,''))
-
-        console.log(sitetitle.value.trim().length)
+        // console.log(tempimagesbasket.value)
+        // const rev = tempimagesbasket.value.reverse()
+        // console.log(rev)
+        // console.log(tempimagesbasket.value.reverse())
         if(sitetitle.value.trim().length > 0 && footertins.value.trim().length > 0 && aboutdetails.value.trim().length > 0){ 
             store.save(sitetitle.value,aboutdetails.value,footertins.value,tempimagesbasket.value)
             emits('donesaving')
@@ -99,10 +103,10 @@
     function doit(e){
         var y = e.target.files
         for(var i=0; i<y.length;i++){
+            // imgs.value.unshift({title:'',image:URL.createObjectURL(y[i])})
             imgs.value.push({title:'',image:URL.createObjectURL(y[i])})
            
         }
-        
     }
 </script>
 

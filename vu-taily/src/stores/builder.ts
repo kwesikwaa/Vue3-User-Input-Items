@@ -15,22 +15,20 @@ export const useBuilderStore = defineStore('admin',{
             footermessage: '(c) 2022 mysitename goes here',
             about: "write a little about yourself and perhaps your contacts etc etc etc bla bla bla bla abala alalalalala",
             image: '../assets/frg.jpg',
-            imagesupload: [],
+            imagesupload: [] ,
         }
     ),
     actions:{
-        save(title:String,about:String,footer:String, images?: Array<Object>){
+        save(title:String,about:String,footer:String, images?: Imageset[]){
             this.header = title;
             this.about = about;
             this.footermessage = footer
             this.imagesupload = images
             this.updated = true
-            this.savetolocalstorage()
+            
             
         },
-        savetolocalstorage(){
-            //implement local sotrage of data
-        },
+       
         setheader(header: String){
             // this.header = header;
             console.log('hi')
@@ -56,5 +54,16 @@ export const useBuilderStore = defineStore('admin',{
             }
         }
 
-    }
+    },
+    getters:{
+        getimagelist:(state)=>{
+            console.log('inside getters')
+            let temp = state.imagesupload
+            console.log(temp)            
+            console.log(temp.reverse())
+            return temp.reverse()
+            
+        }
+    },
+   
 })

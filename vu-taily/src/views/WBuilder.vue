@@ -7,7 +7,8 @@
             <button @click="whichone('about')" class="  p-2 text-black">ABOUT</button>
             <button @click="whichone('edit')" class="  p-2 text-black">EDIT</button>
         </div>
-        <Gallerywidget v-show="gallery" :imagelist="imagelist" />
+        <Gallerywidget v-show="gallery" @emitthis="openthisimage" :imagelist="imagelist" />
+        <Openimage v-show="!closeimage" @closethisimage="closeimagefxn" :feedsource="feedsource" />
         <Aboutpage v-show="about"/> 
         <Editpage v-if="edit" @donesaving="whichone('gallery')"/>  
         <FooterWidget :footermessage="footmsg"/>
@@ -21,22 +22,41 @@
     import FooterWidget from '../components/footerwidget.vue'
     import Aboutpage from '../components/aboutpage.vue'
     import Ticker from '../components/ticker.vue'
-    import { useBuilderStore } from '../stores/builder'
-    import { ref } from 'vue';
+    import {useBuilderStore} from '../stores/builder'
+    import {ref} from 'vue';
     import Editpage from '../components/editpage.vue'
-    import { storeToRefs } from 'pinia';
-
-    
+    import {storeToRefs} from 'pinia';
+    import Openimage from '../components/openimage.vue'
+import { computed } from '@vue/reactivity'
 
     const store = useBuilderStore()
     const here = storeToRefs(store).header;
     const footmsg = storeToRefs(store).footermessage;
 
-    let about = ref(false);
+    let about = ref(false)
     let edit = ref(false)
     let gallery = ref(true)
+    let closeimage = ref(true)
 
-    let imagelist = storeToRefs(store).imagesupload
+    let feedsource = ref('')
+
+    function closeimagefxn(val){
+        closeimage.value = val
+    }
+
+    let imagelis = storeToRefs(store).imagesupload
+    // let imagelist = storeToRefs(store).getimagelist
+    const imagelist = computed(()=>{ 
+            var temp = imagelis.value
+            console.log(temp)
+            console.log(temp.reverse())
+        return temp.reverse()})
+
+    function openthisimage(val){
+        closeimage.value = false;
+        console.log(val)
+        feedsource.value = val
+    }
 
     function whichone(which){
         switch (which) {
@@ -58,5 +78,4 @@
                 break;
         }
     }
-
 </script>

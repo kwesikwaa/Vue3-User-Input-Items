@@ -8,7 +8,7 @@
                 <div>
                     <div v-if="updated" class="container gap-0.5 grid grid-cols-2 md:grid-cols-3">
                         <div v-for="item in props.imagelist" :key="item.image" class="container w-full rounded-md overflow-hidden text-white">
-                            <div class=" w-full h-full relative">
+                            <div @click="emitthisone(item)" class=" w-full h-full relative">
                                 <img  class="w-full object-fill object-center" :src=item.image :alt="item.title">
                                 <div class="absolute bg-black opacity-0 hover:opacity-70 duration-75 p-2 text-center text-white flex items-center justify-center w-full h-full inset-0">{{item.title}} </div>
                             </div>
@@ -17,7 +17,7 @@
                     </div>
                     <div v-else class="container gap-0.5 grid grid-cols-2 md:grid-cols-3">
                         <div v-for="xx in 6" class="container w-full rounded-md overflow-hidden text-white">
-                            <div class=" w-full h-full relative">
+                            <div @click="emitthisone('../assets/frg.jpg')" class=" w-full h-full relative">
                                 <img  class="w-full object-fill object-center" src='../assets/frg.jpg' alt="froggydefault">
                                 <div class="absolute bg-black opacity-0 hover:opacity-70 duration-500 text-white text-center p-2 flex items-center justify-center w-full h-full inset-0">This be the caption for this die you know </div>
                             </div>
@@ -40,12 +40,19 @@
 
 <script setup>
     import { useBuilderStore } from '../stores/builder';
+    import {ref} from 'vue'
     import { storeToRefs } from 'pinia';
 
     const {updated} = storeToRefs(useBuilderStore())
     let props = defineProps(['imagelist','hasHeader'])
+    const emits = defineEmits('emitthis')
+    // let templist = ref(props.imagelist)
+    // let reverselist = props.imagelist.reverse()
 
-
+    function emitthisone(v){
+        emits('emitthis',v)
+        console.log('clicked')
+    }
    
     
     let cc = 'lg:grid-cols-4'

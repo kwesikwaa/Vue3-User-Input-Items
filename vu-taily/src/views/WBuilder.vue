@@ -43,14 +43,15 @@ import { computed } from '@vue/reactivity'
     function closeimagefxn(val){
         closeimage.value = val
     }
+    
 
     let imagelis = storeToRefs(store).imagesupload
     // let imagelist = storeToRefs(store).getimagelist
     const imagelist = computed(()=>{ 
-            var temp = imagelis.value
-            console.log(temp)
-            console.log(temp.reverse())
-        return temp.reverse()})
+
+        //what i learnt n struggled with was transforming the list...
+        // found out that [...list].reverse() works instead or list.reverse()
+        return [...imagelis.value].reverse()})
 
     function openthisimage(val){
         closeimage.value = false;

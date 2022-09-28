@@ -27,7 +27,7 @@
     import Editpage from '../components/editpage.vue'
     import {storeToRefs} from 'pinia';
     import Openimage from '../components/openimage.vue'
-import { computed } from '@vue/reactivity'
+    import { computed } from '@vue/reactivity'
 
     const store = useBuilderStore()
     const here = storeToRefs(store).header;

@@ -53,7 +53,7 @@
     
     let imagesource = ref('')
     let temp = ref('')
-    let picker = ref(null);
+    let picker = ref();
 
     let caption = ref('')
 

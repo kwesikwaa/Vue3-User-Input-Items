@@ -1,17 +1,19 @@
 <template>
-    <div class=" w-11/12 md:w-9/12 m-auto">
-        <Ticker @emitedit="whichone('edit')"/>
-        <WBHeader :headtext="here" class=" mb-2"/>
-        <div class=" flex justify-center">
-            <button  @click="whichone('gallery')" class="  text-black">GALLERY</button>
-            <button @click="whichone('about')" class="  p-2 text-black">ABOUT</button>
-            <button @click="whichone('edit')" class="  p-2 text-black">EDIT</button>
+    <div class="bg-black">
+        <div class=" w-11/12 md:w-9/12 m-auto text-white">
+            <Ticker @emitedit="whichone('edit')"/>
+            <WBHeader :headtext="here" class=" mb-2"/>
+            <div class=" flex justify-center">
+                <button  @click="whichone('gallery')" class="  ">GALLERY</button>
+                <button @click="whichone('about')" class="  p-2 ">ABOUT</button>
+                <button @click="whichone('edit')" class="  p-2 ">EDIT</button>
+            </div>
+            <Gallerywidget v-show="gallery" @emitthis="openthisimage" :imagelist="imagelist" />
+            <Openimage v-show="!closeimage" @closethisimage="closeimagefxn" :feedsource="feedsource" />
+            <Aboutpage v-show="about"/> 
+            <Editpage v-if="edit" @donesaving="whichone('gallery')"/>  
+            <FooterWidget :footermessage="footmsg"/>
         </div>
-        <Gallerywidget v-show="gallery" @emitthis="openthisimage" :imagelist="imagelist" />
-        <Openimage v-show="!closeimage" @closethisimage="closeimagefxn" :feedsource="feedsource" />
-        <Aboutpage v-show="about"/> 
-        <Editpage v-if="edit" @donesaving="whichone('gallery')"/>  
-        <FooterWidget :footermessage="footmsg"/>
     </div>
     
 </template>

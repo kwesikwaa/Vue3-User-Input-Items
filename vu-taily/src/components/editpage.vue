@@ -7,8 +7,9 @@
     <input v-show="false" @change="doit" type="file" ref="pix" multiple=true accept="image/*">
     <button @click="pix.click()" class=" w-full h-14 bg-red-600 hover:bg-red-500 rounded-md py-1 px-3 text-white">UPLOAD IMAGES</button>
 
-    <div class="grid grid-cols-2 gap-0.5 md:grid-cols-3">
-        <transition-group tag="" name="list" >
+    <!-- TRYING OUT THE AUTO-ANIMATE LIBRARY -->
+    <div class="grid grid-cols-2 gap-0.5 md:grid-cols-3" ref="parent">
+        <!-- <transition-group tag="" name="list" > -->
             <div class="w-full" v-for="pic in imgs" key="pic">
                 <Preview  
                 :imgsr="pic.image" :isProfile="isprofile" 
@@ -17,7 +18,7 @@
                 @emitcontent="captionreceive"      
             />
             </div>
-        </transition-group>
+        <!-- </transition-group> -->
     </div>
     <button @click="save" class="w-full bg-blue-600 hover:bg-blue-500 rounded-md py-2 text-white my-2">SAVE</button>
 
@@ -29,7 +30,10 @@
     import {onBeforeMount, ref} from 'vue'
     import { useBuilderStore } from '../stores/builder';
     import { storeToRefs } from 'pinia';
+    import {useAutoAnimate} from '@formkit/auto-animate/vue'
     
+    const [parent] = useAutoAnimate()
+
     const store = useBuilderStore()
 
     let isprofile = ref(false)
@@ -54,8 +58,8 @@
         footertins.value = val
     }
     
-    let imgs = storeToRefs(store).imagesupload
-    // let imgs = storeToRefs(store).getimagelist
+    // let imgs = storeToRefs(store).imagesupload
+    let imgs = ref([])
 
     let tempimagesbasket = ref([])
     
@@ -92,9 +96,15 @@
     function loadfromlocalstorage(){}
 
     function a(b){
+        console.log('in a')
+        // imgs.value.filter(i=> i.image!=b)
+        console.log('after filter')
         for(var i=0; i< imgs.value.length; i++){
-            if(imgs.value[i]==b){
+            console.log('in loop')
+            if(imgs.value[i].image==b){
+                console.log('before sxlice')
                 imgs.value.splice(i,1)
+                console.log('after slice')
                 break
             }
         }  

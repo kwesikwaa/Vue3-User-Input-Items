@@ -4,6 +4,7 @@ interface Imageset  {
     title: string;
     // description: string;
     image: string;
+    todisk: string;
 }
 
 export const useBuilderStore = defineStore('admin',{
@@ -20,13 +21,23 @@ export const useBuilderStore = defineStore('admin',{
     ),
     actions:{
         save(title:String,about:String,footer:String, images?: Imageset[]){
+            
             this.header = title;
             this.about = about;
             this.footermessage = footer
             this.imagesupload = images
             this.updated = true
-            
-            
+            localStorage.setItem("saved",JSON.stringify(
+                {
+                    images: this.imagesupload,
+                    header: title,
+                    about: about,
+                    footermessage: footer,
+                }
+            ))
+        },
+        setupdate(){
+            this.updated = !this.updated
         },
        
         setheader(header: String){

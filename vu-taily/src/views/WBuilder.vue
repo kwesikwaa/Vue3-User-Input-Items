@@ -6,7 +6,7 @@
             <div class=" flex justify-center">
                 <button  @click="whichone('gallery')" class="  ">GALLERY</button>
                 <button @click="whichone('about')" class="  p-2 ">ABOUT</button>
-                <button @click="whichone('edit')" class="  p-2 ">EDIT</button>
+                <!-- <button @click="whichone('edit')" class="  p-2 ">EDIT</button> -->
             </div>
             <Gallerywidget v-show="gallery" @emitthis="openthisimage" :imagelist="imagelist" />
             <Openimage v-show="!closeimage" @closethisimage="closeimagefxn" :feedsource="feedsource" />
@@ -25,7 +25,7 @@
     import Aboutpage from '../components/aboutpage.vue'
     import Ticker from '../components/ticker.vue'
     import {useBuilderStore} from '../stores/builder'
-    import {ref} from 'vue';
+    import {ref, onBeforeMount} from 'vue';
     import Editpage from '../components/editpage.vue'
     import {storeToRefs} from 'pinia';
     import Openimage from '../components/openimage.vue'
@@ -41,19 +41,30 @@
     let closeimage = ref(true)
 
     let feedsource = ref('')
-
+    let imagelist = ref([])
     function closeimagefxn(val){
         closeimage.value = val
     }
     
+    onBeforeMount(()=>{
+        if(localStorage.getItem("saved")){
+            store.setupdate()
+            imagelist.value = JSON.parse(localStorage.getItem("saved")).images
+        }
+        else{
+            // let imagelis = storeToRefs(store).imagesupload
+            // const imagelist = computed(()=>{ 
+                console.log('did i')
+                imagelist.value = []
+            //what i learnt n struggled with was transforming the list...
+            // found out that [...list].reverse() works instead or list.reverse()
+            // return [...imagelis.value].reverse()})
+        }
+    })
 
-    let imagelis = storeToRefs(store).imagesupload
+    
     // let imagelist = storeToRefs(store).getimagelist
-    const imagelist = computed(()=>{ 
-
-        //what i learnt n struggled with was transforming the list...
-        // found out that [...list].reverse() works instead or list.reverse()
-        return [...imagelis.value].reverse()})
+    
 
     function openthisimage(val){
         closeimage.value = false;

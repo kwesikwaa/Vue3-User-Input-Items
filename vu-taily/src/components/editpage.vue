@@ -10,7 +10,7 @@
     <!-- TRYING OUT THE AUTO-ANIMATE LIBRARY -->
     <div class="grid grid-cols-2 gap-0.5 md:grid-cols-3" ref="parent">
         <!-- <transition-group tag="" name="list" > -->
-            <div class="w-full" v-for="pic in imgs" key="pic">
+            <div class="w-full" v-for="pic in imgs" key="pic.image">
                 <Preview  
                 :imgsr="pic.image" :isProfile="isprofile" 
                 @closed="a"    
@@ -38,8 +38,7 @@
 
     let isprofile = ref(false)
 
-    let pix = ref(null)
-    
+    let pix = ref(null)    
 
     let sitetitle = ref('')
     let aboutdetails = ref('')
@@ -59,7 +58,7 @@
     }
     
     // let imgs = storeToRefs(store).imagesupload
-    let imgs = ref([])
+    const imgs = ref([])
 
     let tempimagesbasket = ref([])
     
@@ -71,17 +70,14 @@
         sitetitle.value = store.header
         aboutdetails.value = store.about
         footertins.value = store.footermessage
+        imgs.value = JSON.parse(localStorage.getItem('saved').images)
+        console.log('yh we do am')
+        // console.log(imgs.value)
     })
 
     function save(){
-        console.log(sitetitle.value)
-        // console.log(sitetitle.value.replace(/\s+/g,''))
-        // console.log(tempimagesbasket.value)
-        // const rev = tempimagesbasket.value.reverse()
-        // console.log(rev)
-        // console.log(tempimagesbasket.value.reverse())
         if(sitetitle.value.trim().length > 0 && footertins.value.trim().length > 0 && aboutdetails.value.trim().length > 0){ 
-            store.save(sitetitle.value,aboutdetails.value,footertins.value,tempimagesbasket.value)
+            store.save(sitetitle.value,aboutdetails.value,footertins.value,imgs.value)
             emits('donesaving')
         }
         else{
@@ -90,32 +86,34 @@
         
     }
 
-    function savetolocalstorage(){
-        
-    }
-    function loadfromlocalstorage(){}
-
     function a(b){
         console.log('in a')
-        // imgs.value.filter(i=> i.image!=b)
-        console.log('after filter')
-        for(var i=0; i< imgs.value.length; i++){
-            console.log('in loop')
-            if(imgs.value[i].image==b){
-                console.log('before sxlice')
-                imgs.value.splice(i,1)
-                console.log('after slice')
-                break
-            }
-        }  
+        console.log(`before filter ${imgs.value.length}`)
+        imgs.value = imgs.value.filter(img=> img.image!==b)
+        tempimagesbasket.value = tempimagesbasket.value.filter(cap=> cap !==b)
+        console.log(tempimagesbasket.value)
+        console.log(`after filter ${imgs.value.length}`)
+        // for(var i=0; i< imgs.value.length; i++){
+        //     console.log('in loop')
+        //     if(imgs.value[i].image==b){
+        //         console.log('before sxlice')
+        //         imgs.value.splice(i,1)
+        //         console.log('after slice')
+        //         break
+        //     }
+        // }  
         
     }
+
     function doit(e){
-        var y = e.target.files
-        for(var i=0; i<y.length;i++){
-            // imgs.value.unshift({title:'',image:URL.createObjectURL(y[i])})
-            imgs.value.push({title:'',image:URL.createObjectURL(y[i])})
-           
+        const y = e.target.files
+        for(let i=0; i<y.length;i++){
+            const reader = new FileReader()
+            // reader.readAsText(y[i])
+            reader.readAsDataURL(y[i])
+            reader.onload = (e) => {
+                imgs.value.push({title:'',image: reader.result})
+            }
         }
     }
 </script>

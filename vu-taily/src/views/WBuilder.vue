@@ -54,7 +54,6 @@
         else{
             // let imagelis = storeToRefs(store).imagesupload
             // const imagelist = computed(()=>{ 
-                console.log('did i')
                 imagelist.value = []
             //what i learnt n struggled with was transforming the list...
             // found out that [...list].reverse() works instead or list.reverse()
@@ -68,7 +67,6 @@
 
     function openthisimage(val){
         closeimage.value = false;
-        console.log(val)
         feedsource.value = val
     }
 
@@ -84,6 +82,7 @@
                 about.value = false
                 edit.value = false
                 gallery.value = true
+                imagelist.value = JSON.parse(localStorage.getItem("saved")).images
                 break;
             case 'edit':
                 edit.value = true

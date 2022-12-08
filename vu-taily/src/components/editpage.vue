@@ -27,9 +27,8 @@
 <script setup>
     import Uploaddetails from './uploaddetails.vue';
     import Preview from './preview.vue';
-    import {onBeforeMount, onMounted, ref} from 'vue'
+    import {onBeforeMount, ref} from 'vue'
     import { useBuilderStore } from '../stores/builder';
-    import { storeToRefs } from 'pinia';
     import {useAutoAnimate} from '@formkit/auto-animate/vue'
     
     const [parent] = useAutoAnimate()
@@ -70,11 +69,9 @@
         sitetitle.value = store.header
         aboutdetails.value = store.about
         footertins.value = store.footermessage
-        // console.log(imgs.value)
-    })
-    onMounted(()=>{
-        imgs.value = JSON.parse(localStorage.getItem('saved').images)
-        console.log('yh we do am')
+        if(localStorage.getItem("saved")){
+            imgs.value = JSON.parse(localStorage.getItem("saved")).images
+        }
     })
 
     function save(){
@@ -89,12 +86,9 @@
     }
 
     function a(b){
-        console.log('in a')
-        console.log(`before filter ${imgs.value.length}`)
         imgs.value = imgs.value.filter(img=> img.image!==b)
         tempimagesbasket.value = tempimagesbasket.value.filter(cap=> cap !==b)
-        console.log(tempimagesbasket.value)
-        console.log(`after filter ${imgs.value.length}`)
+        
         // for(var i=0; i< imgs.value.length; i++){
         //     console.log('in loop')
         //     if(imgs.value[i].image==b){

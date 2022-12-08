@@ -27,7 +27,7 @@
 <script setup>
     import Uploaddetails from './uploaddetails.vue';
     import Preview from './preview.vue';
-    import {onBeforeMount, ref} from 'vue'
+    import {onBeforeMount, onMounted, ref} from 'vue'
     import { useBuilderStore } from '../stores/builder';
     import { storeToRefs } from 'pinia';
     import {useAutoAnimate} from '@formkit/auto-animate/vue'
@@ -70,9 +70,11 @@
         sitetitle.value = store.header
         aboutdetails.value = store.about
         footertins.value = store.footermessage
+        // console.log(imgs.value)
+    })
+    onMounted(()=>{
         imgs.value = JSON.parse(localStorage.getItem('saved').images)
         console.log('yh we do am')
-        // console.log(imgs.value)
     })
 
     function save(){
